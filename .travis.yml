@@ -1,6 +1,0 @@
-language: go
-go: 
- - 1.15.5 
-
-script:
- - go test ./...
