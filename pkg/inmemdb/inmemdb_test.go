@@ -77,9 +77,9 @@ func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
 
 func TestGetWhenKeyExitsThenDelete(t *testing.T) {
 	// Arrange
-	key := "key"
+	key := "qwerty"
 	memdb := NewMemDb()
-	memdb.Set("qwerty", "random value")
+	memdb.Set(key, "random value")
 
 	// Act
 	memdb.Delete(key)

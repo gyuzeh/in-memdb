@@ -40,6 +40,6 @@ func (mdb *MemDb) Delete(key string) {
 	_, ok := mdb.Db[key]
 
 	if ok {
-		delete(mdb.Db, "moo")
+		delete(mdb.Db, key)
 	}
 }
