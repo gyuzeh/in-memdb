@@ -4,7 +4,7 @@ import "fmt"
 
 // DuplicateKeyError struct for duplicate key error
 type DuplicateKeyError struct {
-	key string
+	key interface{}
 }
 
 func (e DuplicateKeyError) Error() string {
