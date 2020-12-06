@@ -24,11 +24,10 @@ func TestSetWhenKeyAndStringValueAreProvidedThenIsSaved(t *testing.T) {
 	memdb := NewMemDb()
 
 	// Act
-	result, err := memdb.Set(key, data)
+	err := memdb.Set(key, data)
 
 	// Assert
 	assert.Nil(t, err)
-	assert.True(t, result)
 }
 
 func TestSetWhenKeyAndObjectValueAreProvidedThenIsSaved(t *testing.T) {
@@ -38,11 +37,10 @@ func TestSetWhenKeyAndObjectValueAreProvidedThenIsSaved(t *testing.T) {
 	memdb := NewMemDb()
 
 	// Act
-	result, err := memdb.Set(key, data)
+	err := memdb.Set(key, data)
 
 	// Assert
 	assert.Nil(t, err)
-	assert.True(t, result)
 }
 
 func TestSetWhenValueWithExistingKeyIsProvidedThenItShouldFail(t *testing.T) {
@@ -53,12 +51,11 @@ func TestSetWhenValueWithExistingKeyIsProvidedThenItShouldFail(t *testing.T) {
 	memdb.Set(key, data)
 
 	// Act
-	result, err := memdb.Set(key, data)
+	err := memdb.Set(key, data)
 
 	// Assert
 	assert.NotNil(t, err)
 	assert.Equal(t, "Duplicated Key 12345", err.Error())
-	assert.False(t, result)
 }
 
 func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
@@ -67,12 +64,13 @@ func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
 	memdb := NewMemDb()
 	memdb.Set(key, data)
+	var employee Employee
 
 	// Act
-	result := memdb.Get(key)
+	err := memdb.Get(key, &employee)
 
 	// Assert
-	assert.Equal(t, data, result)
+	assert.Nil(t, err)
 }
 
 func TestGetWhenKeyExitsThenDelete(t *testing.T) {
@@ -80,12 +78,14 @@ func TestGetWhenKeyExitsThenDelete(t *testing.T) {
 	key := "qwerty"
 	memdb := NewMemDb()
 	memdb.Set(key, "random value")
+	var result Employee
 
 	// Act
 	memdb.Delete(key)
 
 	// Assert
-	assert.Nil(t, memdb.Get(key))
+	memdb.Get(key, &result)
+	assert.Equal(t, Employee{}, result)
 }
 
 func TestDeleteWhenKeyDoesNotExitsThenDontThrowError(t *testing.T) {
