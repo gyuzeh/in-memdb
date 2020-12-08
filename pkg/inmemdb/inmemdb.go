@@ -3,7 +3,7 @@ package inmemdb
 import (
 	"sync"
 
-	"github.com/gyuzeh/in-memdb/internals/encoding"
+	"github.com/gyuzeh/in-memdb/internals/serialization"
 )
 
 // Db that can be executed in the database
@@ -16,18 +16,13 @@ type Db interface {
 // MemDb is a Volatile Memory Database
 type memDb struct {
 	storage sync.Map
-	enc     encoding.Encoding
+	enc     serialization.Serialization
 }
 
 // NewMemDb Creates a new instance of MemDb
-func NewMemDb() Db {
-	db := memDb{storage: sync.Map{}, enc: &encoding.NullConverter{}}
+func NewMemDb(serialization serialization.Serialization) Db {
+	db := memDb{storage: sync.Map{}, enc: serialization}
 	return &db
-}
-
-// UseEnconding changes the default enconfing in MemDb
-func (mdb *memDb) UseEnconding(enconding encoding.Encoding) {
-	mdb.enc = enconding
 }
 
 // Set an Object in the MemDb

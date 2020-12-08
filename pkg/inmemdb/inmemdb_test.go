@@ -3,6 +3,7 @@ package inmemdb
 import (
 	"testing"
 
+	"github.com/gyuzeh/in-memdb/internals/serialization"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +22,7 @@ func TestSetWhenKeyAndStringValueAreProvidedThenIsSaved(t *testing.T) {
         "lastname": "Sting",
         "city": "London"
     }`
-	memdb := NewMemDb()
+	memdb := NewMemDb(serialization.NullSerialization{})
 
 	// Act
 	err := memdb.Set(key, data)
@@ -34,7 +35,7 @@ func TestSetWhenKeyAndObjectValueAreProvidedThenIsSaved(t *testing.T) {
 	// Arrange
 	key := "empKey"
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
-	memdb := NewMemDb()
+	memdb := NewMemDb(serialization.NullSerialization{})
 
 	// Act
 	err := memdb.Set(key, data)
@@ -47,7 +48,7 @@ func TestSetWhenValueWithExistingKeyIsProvidedThenItShouldFail(t *testing.T) {
 	// Arrange
 	key := "12345"
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
-	memdb := NewMemDb()
+	memdb := NewMemDb(serialization.NullSerialization{})
 	memdb.Set(key, data)
 
 	// Act
@@ -62,7 +63,7 @@ func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
 	// Arrange
 	key := "key"
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
-	memdb := NewMemDb()
+	memdb := NewMemDb(serialization.NullSerialization{})
 	memdb.Set(key, data)
 	var employee Employee
 
@@ -76,7 +77,7 @@ func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
 func TestGetWhenKeyExitsThenDelete(t *testing.T) {
 	// Arrange
 	key := "qwerty"
-	memdb := NewMemDb()
+	memdb := NewMemDb(serialization.NullSerialization{})
 	memdb.Set(key, "random value")
 	var result Employee
 
@@ -91,8 +92,40 @@ func TestGetWhenKeyExitsThenDelete(t *testing.T) {
 func TestDeleteWhenKeyDoesNotExitsThenDontThrowError(t *testing.T) {
 	// Arrange
 	key := "unExistingKey"
-	memdb := NewMemDb()
+	memdb := NewMemDb(serialization.NullSerialization{})
 
 	// Act & Assert
 	memdb.Delete(key)
+}
+
+func TestSetWhenSerializationMsgPackIsConfiguredThenSetAndGet(t *testing.T) {
+	// Arrange
+	key := "empKey"
+	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
+	memdb := NewMemDb(serialization.MsgPackSerialization{})
+
+	// Act
+	err := memdb.Set(key, data)
+
+	// Assert
+	assert.Nil(t, err)
+	var employee Employee
+	memdb.Get(key, &employee)
+	assert.Equal(t, employee, data)
+}
+
+func TestSetWhenSerializationGobsIsConfiguredThenSetAndGet(t *testing.T) {
+	// Arrange
+	key := "empKey"
+	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
+	memdb := NewMemDb(serialization.GobsSerialization{})
+
+	// Act
+	err := memdb.Set(key, data)
+
+	// Assert
+	assert.Nil(t, err)
+	var employee Employee
+	memdb.Get(key, &employee)
+	assert.Equal(t, employee, data)
 }
