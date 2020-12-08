@@ -19,8 +19,8 @@ type memDb struct {
 	enc     serialization.Serialization
 }
 
-// NewMemDb Creates a new instance of MemDb
-func NewMemDb(serialization serialization.Serialization) Db {
+// New Creates a new instance of MemDb
+func New(serialization serialization.Serialization) Db {
 	db := memDb{storage: sync.Map{}, enc: serialization}
 	return &db
 }
