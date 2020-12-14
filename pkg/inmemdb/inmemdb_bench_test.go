@@ -3,8 +3,8 @@ package inmemdb_test
 import (
 	"testing"
 
-	"github.com/gyuzeh/in-memdb/internals/serialization"
 	"github.com/gyuzeh/in-memdb/pkg/inmemdb"
+	"github.com/gyuzeh/in-memdb/pkg/serialization"
 )
 
 type Product struct {
@@ -27,7 +27,7 @@ func BenchmarkInMemDbSetWithDefaultSerialization(b *testing.B) {
 		Size:        []string{"S", "M", "L"},
 	}
 
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 
 	//Act
 	for n := 0; n < b.N; n++ {
@@ -81,7 +81,7 @@ func BenchmarkInMemDbGetWithDefaultSerialization(b *testing.B) {
 		Colors:      []string{"red", "yello", "blue"},
 		Size:        []string{"S", "M", "L"},
 	}
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 
 	for n := 0; n < b.N; n++ {
 		memdb.Set(n, data)

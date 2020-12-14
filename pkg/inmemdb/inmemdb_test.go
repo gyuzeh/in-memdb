@@ -3,8 +3,8 @@ package inmemdb_test
 import (
 	"testing"
 
-	"github.com/gyuzeh/in-memdb/internals/serialization"
 	"github.com/gyuzeh/in-memdb/pkg/inmemdb"
+	"github.com/gyuzeh/in-memdb/pkg/serialization"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +23,7 @@ func TestSetWhenKeyAndStringValueAreProvidedThenIsSaved(t *testing.T) {
         "lastname": "Sting",
         "city": "London"
     }`
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 
 	// Act
 	err := memdb.Set(key, data)
@@ -36,7 +36,7 @@ func TestSetWhenKeyAndObjectValueAreProvidedThenIsSaved(t *testing.T) {
 	// Arrange
 	key := "empKey"
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 
 	// Act
 	err := memdb.Set(key, data)
@@ -49,7 +49,7 @@ func TestSetWhenValueWithExistingKeyIsProvidedThenItShouldFail(t *testing.T) {
 	// Arrange
 	key := "12345"
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 	memdb.Set(key, data)
 
 	// Act
@@ -64,7 +64,7 @@ func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
 	// Arrange
 	key := "key"
 	data := Employee{FirstName: "Rocky", LastName: "Sting", City: "London"}
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 	memdb.Set(key, data)
 	var employee Employee
 
@@ -78,7 +78,7 @@ func TestGetWhenKeyExitsThenReturnValue(t *testing.T) {
 func TestGetWhenKeyExitsThenDelete(t *testing.T) {
 	// Arrange
 	key := "qwerty"
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 	memdb.Set(key, "random value")
 	var result Employee
 
@@ -93,7 +93,7 @@ func TestGetWhenKeyExitsThenDelete(t *testing.T) {
 func TestDeleteWhenKeyDoesNotExitsThenDontThrowError(t *testing.T) {
 	// Arrange
 	key := "unExistingKey"
-	memdb := inmemdb.New(serialization.NullSerialization{})
+	memdb := inmemdb.New(serialization.PlainSerialization{})
 
 	// Act & Assert
 	memdb.Delete(key)
