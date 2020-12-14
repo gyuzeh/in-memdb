@@ -32,10 +32,9 @@ func InMemDbExample() {
 
 ## Available Serialization for InMemory Db
 ```go
-    memdb := inmemdb.New(serialization.PlainSerialization{})
-    memdb := inmemdb.New(serialization.MsgPackSerialization{})
-    memdb := inmemdb.New(serialization.GobSerialization{})
-}
+    memdb := inmemdb.New(serialization.PlainSerialization{}) // plain objects in memory
+    memdb := inmemdb.New(serialization.MsgPackSerialization{}) // serializes to MsgPack in Memory
+    memdb := inmemdb.New(serialization.GobSerialization{}) // serializes to Gob in Memory
 ```
 
 ## Building 
