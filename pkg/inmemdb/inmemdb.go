@@ -3,7 +3,7 @@ package inmemdb
 import (
 	"sync"
 
-	"github.com/gyuzeh/in-memdb/internals/serialization"
+	"github.com/gyuzeh/in-memdb/pkg/serialization"
 )
 
 // Db that can be executed in the database

@@ -1,6 +1,6 @@
 # In Memory Database
 
-Golang InMemory database that allows the usage of several serialization protocols
+Golang InMemory Database allows to abstract from your database implementation to help you in development by replacing the atual database with a stubbed.
 
 ## Quickstart
 
@@ -8,7 +8,7 @@ Golang InMemory database that allows the usage of several serialization protocol
 
 
 ```go
-import "github.com/gyuzeh/in-memdb/internals/serialization"
+import "github.com/gyuzeh/in-memdb/pkg/serialization"
 import "github.com/gyuzeh/in-memdb/pkg/inmemdb"
 
 func InMemDbExample() {
@@ -23,17 +23,29 @@ func InMemDbExample() {
 		Size:        []string{"S", "M", "L"},
     }
     
-    memdb := inmemdb.New(serialization.NullSerialization{})
+    memdb := inmemdb.New(serialization.PlainSerialization{})
     memdb.Set(key, data)
     memdb.Get(key, data)
     memdb.Delete(key)
 }
 ```
 
+## Available Serialization for InMemory Db
+```go
+    memdb := inmemdb.New(serialization.PlainSerialization{})
+    memdb := inmemdb.New(serialization.MsgPackSerialization{})
+    memdb := inmemdb.New(serialization.GobSerialization{})
+}
+```
+
+## Building 
+
+    make build
+
 ## Running the tests
 
-    go test -v ./... 
+    make unit-test
 
 ## Running benchmark tests
 
-    go test bench=. ./... 
+    make benchmark-test 
